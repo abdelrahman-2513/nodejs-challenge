@@ -15,7 +15,7 @@ This is a RESTful API for user management built with Node.js, Express, TypeORM, 
    
    \`\`\`
    git clone https://github.com/abdelrahman-2513/nodejs-challenge.git
-   cd user-management-api
+   cd nodejs-challenge
    \`\`\`
 
 2. Install dependencies:
@@ -52,7 +52,7 @@ This is a RESTful API for user management built with Node.js, Express, TypeORM, 
 | POST | /api/auth/login | User login |
 | GET | /api/users | Get all users (Admin only) |
 | GET | /api/users/:id | Get user by ID |
-| PUT | /api/users/:id | Update user |
+| PATCH | /api/users/:id | Update user |
 | DELETE | /api/users/:id | Delete user (Admin only) |
 | GET | /api/stats/total-users | Get total registered users |
 | GET | /api/stats/total-verified-users | Get total verified users |
