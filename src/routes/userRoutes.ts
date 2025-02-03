@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { createUser, updateUser, deleteUser, getAllUsers, getUserDetails } from '../controllers/userController';
 import { asyncHandler } from '../utils/asyncHandler';
-import { validateCreateUser, validateUpdateUser } from '../dtos/userDto/user-dto';
+import { validateCreateUser, validateUpdateUser } from '../dtos/user-dto';
 import { authenticateToken, isAdmin } from '../middlewares/authMiddleware';
 
 export const userRouter = Router()

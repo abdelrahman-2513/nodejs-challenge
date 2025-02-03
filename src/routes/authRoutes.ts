@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { loginUser, registerUser, verifyUser } from '../controllers/authController';
-import { validateCreateUser, validateLoginUser, validateVerifyUser } from '../dtos/userDto/user-dto';
+import { validateCreateUser, validateLoginUser, validateVerifyUser } from '../dtos/user-dto';
 import { asyncHandler } from '../utils/asyncHandler';
 import { authenticateToken } from '../middlewares/authMiddleware';
 
