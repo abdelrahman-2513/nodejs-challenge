@@ -1,10 +1,10 @@
 import { myDataSource } from "..";
-import { Stats } from "../entities/statsEntity";
+import { Stats, statsRepo } from "../entities/statsEntity";
 import { User } from "../entities/userEntity";
 import { asyncHandler } from "../utils/asyncHandler";
 import { Request, Response } from "express";
 export const createStats = async (user: User) => {
-    const statsRepo = myDataSource.getRepository(Stats);
+    
     const newStats = statsRepo.create({ user, totalLogins: 0 });
     await statsRepo.save(newStats);
     return newStats;
@@ -17,7 +17,7 @@ export const getStatsByUserId = async (req: Request, res: Response) => {
 };
 
 export const updateStatsOnLogin = async (userId: number) => {
-    const statsRepo = myDataSource.getRepository(Stats);
+    
     let userStats = await statsRepo.findOne({ where: { user: { id: userId } } });
     if (userStats) {
         userStats.totalLogins += 1;

@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { createUser, getUserByEmail, updateUser } from './userController';
 import { createStats, updateStatsOnLogin } from './statsController';
 import { myDataSource } from '..';
-import { User } from '../entities/userEntity';
+import { User, userRepo } from '../entities/userEntity';
 import { asyncHandler } from '../utils/asyncHandler';
 export const registerUser = asyncHandler(async (req: Request, res: Response) => {
     try {
@@ -16,7 +16,7 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
 
         const { name, email, password } = req.body;
         const userData = { name, email,password,  verified: false }
-        const userRepo = myDataSource.getRepository(User);
+        
         const newUser = userRepo.create(userData);
         const savedUser = await userRepo.save(newUser);
         await createStats(savedUser)
@@ -62,7 +62,7 @@ export const verifyUser = asyncHandler(async (req: Request, res: Response) => {
         if (!user) return res.status(400).json({ message: 'User not found' });
         if(user.verified) return res.status(400).json({ message: 'User already verified' });
         user.verified = true;
-        const userRepo = myDataSource.getRepository(User);
+        
         await userRepo.update(user.id, { verified: true });
         res.json({ message: 'User verified successfully' });
     } catch (error) {

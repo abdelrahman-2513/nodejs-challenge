@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn } from "typeorm";
 import { EUserRole } from "../enums/user-role.enum";
 import bcrypt from 'bcryptjs';
+import { myDataSource } from "..";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -31,3 +32,5 @@ export class User {
         }
     }
 }
+
+export const  userRepo = myDataSource.getRepository(User);

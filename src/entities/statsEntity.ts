@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./userEntity";
+import { myDataSource } from "..";
 
 @Entity()
 export class Stats {
@@ -19,3 +20,5 @@ export class Stats {
     @CreateDateColumn()
     createdAt: Date;
 }
+
+export const statsRepo = myDataSource.getRepository(Stats);

@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import { myDataSource } from "..";
-import { User } from "../entities/userEntity";
+import { User, userRepo } from "../entities/userEntity";
 import { createStats } from "./statsController";
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
@@ -11,7 +11,7 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
         return res.status(400).json({ errors: errors.array().map(error => error.msg) });
     }
     try {
-        const userRepo = myDataSource.getRepository(User);
+        
         const existingUser = await userRepo.findOne({ where: { email: req.body.email } });
         if (existingUser) return res.status(400).json({ message: 'User already exists' });
         const { password, name,email,role } = req.body;
@@ -25,7 +25,7 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getUserByEmail = async (email: string) => {
-    const userRepo = myDataSource.getRepository(User);
+    
     return await userRepo.findOne({ where: { email } });
 };
 
@@ -36,7 +36,7 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
         return res.status(400).json({ errors: errors.array().map(error => error.msg) });
     }
     try {
-        const userRepo = myDataSource.getRepository(User);
+        
         let existingUser = await userRepo.findOne({ where: { id: Number(req.params.id) } });
         if (!existingUser) return res.status(404).json({ message: 'User not found' });
 
@@ -55,7 +55,7 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
     try {
-        const userRepo = myDataSource.getRepository(User);
+        
         const user = await userRepo.findOne({ where: { id: Number(req.params.id) } });
         if (!user) return res.status(404).json({ message: 'User not found' });
         await userRepo.delete(req.params.id);
@@ -73,7 +73,7 @@ export const getUserDetails = asyncHandler(async (req: Request, res: Response) =
 
 export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
     const { name, email, verified, startDate, endDate, page = 1, limit = 10 } = req.query;
-    const userRepo = myDataSource.getRepository(User);
+    
     
     console.log({
         name, email, verified, startDate, endDate, page , limit 
