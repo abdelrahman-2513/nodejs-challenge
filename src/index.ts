@@ -10,9 +10,8 @@ import { userRouter } from './routes/userRoutes';
 import { statsRouter } from './routes/statsRoutes';
 dotenv.config();
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT || 3000;
-
 console.log({
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
@@ -30,7 +29,7 @@ export const myDataSource = new DataSource({
     entities: [User, Stats],
     logging: true,
     synchronize: true,
-   
+
 });
 
 myDataSource.initialize()
@@ -40,6 +39,12 @@ myDataSource.initialize()
     .catch((err) => {
         console.error("Error during Data Source initialization", err);
     });
+
+
+export const Repositories = {
+    userRepo: () => myDataSource.getRepository(User),
+    statsRepo: () => myDataSource.getRepository(Stats),
+};
 
 app.use(express.json());
 app.use('/api/auth', authRouter);

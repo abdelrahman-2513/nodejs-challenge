@@ -1,12 +1,13 @@
-import { myDataSource } from "..";
-import { Stats, statsRepo } from "../entities/statsEntity";
+import { myDataSource, Repositories } from "..";
+import {  Stats } from "../entities/statsEntity";
 import { User } from "../entities/userEntity";
 import { asyncHandler } from "../utils/asyncHandler";
 import { Request, Response } from "express";
+
 export const createStats = async (user: User) => {
     
-    const newStats = statsRepo.create({ user, totalLogins: 0 });
-    await statsRepo.save(newStats);
+    const newStats = Repositories.statsRepo().create({ user, totalLogins: 0 });
+    await Repositories.statsRepo().save(newStats);
     return newStats;
 };
 
@@ -18,11 +19,11 @@ export const getStatsByUserId = async (req: Request, res: Response) => {
 
 export const updateStatsOnLogin = async (userId: number) => {
     
-    let userStats = await statsRepo.findOne({ where: { user: { id: userId } } });
+    let userStats = await Repositories.statsRepo().findOne({ where: { user: { id: userId } } });
     if (userStats) {
         userStats.totalLogins += 1;
         userStats.lastLogin = new Date();
-        await statsRepo.save(userStats);
+        await Repositories.statsRepo().save(userStats);
     }
 };
 

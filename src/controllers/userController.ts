@@ -1,10 +1,11 @@
 import { validationResult } from "express-validator";
-import { myDataSource } from "..";
-import { User, userRepo } from "../entities/userEntity";
+import { myDataSource, Repositories } from "..";
+import {  User } from "../entities/userEntity";
 import { createStats } from "./statsController";
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import bcrypt from "bcryptjs";
+
 export const createUser = asyncHandler(async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -12,11 +13,11 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
     }
     try {
         
-        const existingUser = await userRepo.findOne({ where: { email: req.body.email } });
+        const existingUser = await Repositories.userRepo().findOne({ where: { email: req.body.email } });
         if (existingUser) return res.status(400).json({ message: 'User already exists' });
         const { password, name,email,role } = req.body;
-        const newUser = userRepo.create({ password, name,email,role });
-        const savedUser = await userRepo.save(newUser);
+        const newUser = Repositories.userRepo().create({ password, name,email,role });
+        const savedUser = await Repositories.userRepo().save(newUser);
         await createStats(savedUser);
         res.status(201).json({user:savedUser, message: 'User created successfully' });
     } catch (error) {
@@ -26,7 +27,7 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const getUserByEmail = async (email: string) => {
     
-    return await userRepo.findOne({ where: { email } });
+    return await Repositories.userRepo().findOne({ where: { email } });
 };
 
 
@@ -37,7 +38,7 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
     }
     try {
         
-        let existingUser = await userRepo.findOne({ where: { id: Number(req.params.id) } });
+        let existingUser = await Repositories.userRepo().findOne({ where: { id: Number(req.params.id) } });
         if (!existingUser) return res.status(404).json({ message: 'User not found' });
 
         Object.assign(existingUser, req.body);
@@ -45,7 +46,7 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
             existingUser.password = await bcrypt.hash(req.body.password, 10);
         }
 
-        const updatedUser = await userRepo.save(existingUser);
+        const updatedUser = await Repositories.userRepo().save(existingUser);
         res.status(200).json({ updatedUser, message: 'User updated successfully' });
     } catch (error) {
         console.log(error);
@@ -56,9 +57,9 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
     try {
         
-        const user = await userRepo.findOne({ where: { id: Number(req.params.id) } });
+        const user = await Repositories.userRepo().findOne({ where: { id: Number(req.params.id) } });
         if (!user) return res.status(404).json({ message: 'User not found' });
-        await userRepo.delete(req.params.id);
+        await Repositories.userRepo().delete(req.params.id);
         res.status(204).json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting user', error });
@@ -79,7 +80,7 @@ export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
         name, email, verified, startDate, endDate, page , limit 
     })
     
-    let query = userRepo.createQueryBuilder('user');
+    let query = Repositories.userRepo().createQueryBuilder('user');
     if (name) query.andWhere('user.name LIKE :name', { name: `%${name}%` });
     if (email) query.andWhere('user.email LIKE :email', { email: `%${email}%` });
     if (verified !== undefined && verified !== '') query.andWhere('user.verified = :verified', { verified: verified === 'true' });

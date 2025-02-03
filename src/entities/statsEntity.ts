@@ -21,4 +21,3 @@ export class Stats {
     createdAt: Date;
 }
 
-export const statsRepo = myDataSource.getRepository(Stats);

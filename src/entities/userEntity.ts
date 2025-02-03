@@ -33,4 +33,3 @@ export class User {
     }
 }
 
-export const  userRepo = myDataSource.getRepository(User);
