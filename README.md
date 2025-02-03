@@ -9,11 +9,12 @@ This is a RESTful API for user management built with Node.js, Express, TypeORM, 
 - Statistics on registered and verified users
 - Filtering, sorting, and pagination support
 
+
 ## Installation
 1. Clone the repository:
    
    \`\`\`
-   git clone https://github.com/your-repo/user-management-api.git
+   git clone https://github.com/abdelrahman-2513/nodejs-challenge.git
    cd user-management-api
    \`\`\`
 
